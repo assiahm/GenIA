@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, Dataset
 from scipy.stats import pearsonr
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import mean_squared_error, accuracy_score
 
 # ///// Charger les données
 # Charger les données
@@ -12,6 +13,8 @@ data = pd.read_json('data/reviews.jsonl', lines=True)
 # Extraire les colonnes nécessaires
 reviews = data[['rating', 'text']].dropna()
 
+# Limiter les données à 200 lignes pour accélérer les tests
+#reviews = reviews.head(200)
 #print(reviews.head(5))
 
 # ///// Charger le modèle et tokenizer
@@ -122,3 +125,7 @@ plt.tight_layout()
 
 # Afficher le graphique
 plt.show()
+
+rmse = mean_squared_error(actual_ratings, predicted_ratings, squared=False)
+accuracy = accuracy_score(actual_ratings, predicted_ratings)
+print(f"RMSE : {rmse}, Accuracy : {accuracy}")
